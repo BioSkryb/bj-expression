@@ -1,0 +1,310 @@
+subtitle: "BJ-Expression v1.8.2"
+custom_logo_title: 'BioSkryb'
+custom_logo: bioskryb_logo-tagline.png
+intro_text: "The report aggregates all metrics from BJ-Expression pipeline to help evaluate the performance of single-cell libraries."
+
+output_fn_name: multiqc_report.html
+data_dir_name: multiqc_data
+
+
+report_section_order:
+    software_versions:
+        order: -1000
+    nf-core-rnaseq-summary:
+        order: -1001
+
+export_plots: true
+
+# Don't show % Dups in the General Stats table (we have this from Picard)
+table_columns_visible:
+    fastqc:
+        percent_duplicates: False
+
+extra_fn_clean_exts:
+    - _R1
+    - _R2
+    - .gz
+    - .fastq
+    - .fq
+    - .bam
+    - .sam
+    - .sra
+    - _fastqqc
+    - _kraken2
+    - _merged
+    - _qc_only_fastp
+    - .umi_dedup
+    - .markdup
+    - type: regex
+      pattern: '_sampled$'
+    - type: regex
+      pattern: '_1$'
+    - type: regex
+      pattern: '_2$'
+    - type: regex
+      pattern: '_S\d+_L\d+'
+    - type: remove
+      pattern: '_sorted.md'
+    - type: regex
+      pattern: '^Sample_\d+'
+    - type: remove
+      pattern: 'QUALIMAP_BAMQC_'
+    - type: remove
+      pattern: 'WF_'
+    - type: remove
+      pattern: '_no_qc_fastp'
+    - type: regex
+      pattern: '^salmon_outdir_'
+    - type: regex
+      pattern: '_no_qc_fastp.json'
+    - type: remove
+      pattern: '.raw'
+
+# Customise the module search patterns to speed up execution time
+#  - Skip module sub-tools that we are not interested in
+#  - Replace file-content searching with filename pattern searching
+#  - Don't add anything that is the same as the MultiQC default
+# See https://multiqc.info/docs/#optimise-file-search-patterns for details
+sp:
+    qualimap_stats:
+        fn: "qualimap_stats_mqc.csv"
+        
+    cutadapt:
+        fn: '*trimming_report.txt'
+
+    sortmerna:
+        fn: '*.sortmerna.log'
+
+    hisat2:
+        fn: '*.hisat2.summary.log'
+
+    salmon/meta:
+        fn: 'meta_info.json'
+
+    preseq:
+        fn: '*.ccurve.txt'
+
+    samtools/stats:
+        fn: '*.stats'
+    samtools/flagstat:
+        fn: '*.flagstat'
+    samtools/idxstats:
+        fn: '*.idxstats*'
+
+    rseqc/bam_stat:
+        fn: '*.bam_stat.txt'
+    rseqc/gene_body_coverage:
+        skip: true
+    rseqc/junction_annotation:
+        fn: '*.junction_annotation.log'
+    rseqc/read_gc:
+        skip: true
+    rseqc/read_distribution:
+        fn: '*.read_distribution.txt'
+    rseqc/infer_experiment:
+        fn: '*.infer_experiment.txt'
+    rseqc/tin:
+        fn: '*.tin.txt'
+
+    picard/markdups:
+        fn: '*.MarkDuplicates.metrics.txt'
+    picard/alignment_metrics:
+        skip: true
+    picard/basedistributionbycycle:
+        skip: true
+    picard/gcbias:
+        skip: true
+    picard/hsmetrics:
+        skip: true
+    picard/insertsize:
+        skip: true
+    picard/oxogmetrics:
+        skip: true
+    picard/pcr_metrics:
+        skip: true
+    picard/quality_by_cycle:
+        skip: true
+    picard/quality_score_distribution:
+        skip: true
+    picard/quality_yield_metrics:
+        skip: true
+    picard/rnaseqmetrics:
+        skip: true
+    picard/rrbs_metrics:
+        skip: true
+    picard/sam_file_validation:
+        skip: true
+    picard/variant_calling_metrics:
+        skip: true
+    picard/wgs_metrics:
+        skip: true
+
+# See https://github.com/ewels/MultiQC_TestData/blob/master/data/custom_content/with_config/table_headerconfig/multiqc_config.yaml
+custom_data:
+    overall_stats:
+        section_name: 'Overall stats'
+        file_format: "csv"
+        plot_type: "table"
+        only_defined_headers: False
+        headers:
+            SampleId:
+                title: "Sample name"
+                description: "Name of the sample"
+                placement: 880
+            BJRawReadPairs:
+                title: "BJ calculated raw read pairs"
+                description: "Number of pair of raw reads calculated with BJ downloader"
+                placement: 890
+            NumNonSubsampledReads:
+                title: " Nonsubsampled reads"
+                description: "Number of nonsubsampled reads"
+                placement: 900
+            RawReads:
+                title: "Subsampled reads"
+                description: "Number of subsampled of eads"
+                placement: 910
+            FilteredReads:
+                title: "Pass filtered reads"
+                description: "Total of fastp-passing reads"
+                placement: 920
+            LowQualityReads:
+                title: "Low quality reads"
+                description: "Fastp-filtered low quality reads"
+                placement: 930
+            TooManyNReads:
+                title: "Many Ns reads"
+                description: "Fastp-filtered reads with many Ns"
+                placement: 940
+            TooShortReads:
+                title: "Too short reads"
+                description: "Fastp-filtered reads due too short"
+                placement: 950
+            PropPassingFilter:
+                title: "Prop pass-filtered reads"
+                description: "Proportion of fastp-passing reads with respect to subsampled reads"
+                placement: 960
+                format: "{:,.5f}"
+            PropLowQualityReads:
+                title: "Prop low quality reads"
+                description: "Proportion of fastp-filtered low quality reads with respect to subsampled reads"
+                placement: 970
+                format: "{:,.5f}"
+            PropTooManyNReads:
+                title: "Prop of many Ns read"
+                description: "Proportion of fastp-filtered reads with many Ns with respect to subsampled reads"
+                placement: 980
+                format: "{:,.5f}"
+            PropTooShortReads:
+                title: "Prop of too short reads"
+                description: "Proportion of fastp-filtered reads due too short with respect to subsampled reads"
+                placement: 990
+                format: "{:,.5f}"
+            PropMappability:
+                title: "Prop mappability"
+                description: "Proportion of reads mapping to the genome"
+                placement: 1000
+                format: "{:,.5f}"
+            PropExonic:
+                title: "Prop exonic"
+                description: "Proportion of reads mapping to exonic regions"
+                placement: 1010
+                format: "{:,.5f}"
+            PropIntronic:
+                title: "Prop intronic"
+                description:  "Proportion of reads mapping to intronic regions"
+                placement: 1020
+                format: "{:,.5f}"
+            PropIntergenic:
+                title: "Prop intergenic"
+                description: "Proportion of reads mapping to intergenic regions"
+                placement: 1030
+                format: "{:,.5f}"
+            ProportionCountsMithochondrialGenes:
+                title: "Prop mitochondrion"
+                description: "Proportion of reads mapping to mitochondrion"
+                placement: 1040
+                format: "{:,.5f}"
+            ProteinCodingGenesDetected:
+                title: "Protein-coding genes"
+                description: "Number of protein-coding genes detected"
+                placement: 1050
+            ProteinCodingTranscriptsDetected:
+                title: "Protein-coding transcripts"
+                description: "Number of protein-coding transcripts detected"
+                placement: 1060
+            RatioAvTxbyGene:
+                title: "Mean number of txs per gene"
+                description: "Average number of transcripts oberserved per gene "
+                placement: 1070
+                format: "{:,.5f}"
+            RatioTranscriptBody:
+                title: "Coverage ratio gene-body"
+                description: "Ratio of coverage if splitting the gene-body in two sections."
+                placement: 1080
+                format: "{:,.5f}"
+            MedianCoverageTranscriptBody:
+                title: "Median coverage gene-body"
+                description: "Median coverage across the whole gene-body"
+                placement: 1090
+                format: "{:,.5f}"
+            DynamicRange:
+                title: "Dynamic range"
+                description: "Measures the ability to capture and describe the full spectrum of gene expression variation. The broader, indicates the more complexity of gene expression patterns detected"
+                placement: 1100
+                format: "{:,.5f}"
+            Phase:
+                title: "Cell-type: Phase"
+                description: "Seurat-based typing of cell phase"
+                placement: 1110
+            Progenitor:
+                title: "Cell-type: Progenitor"
+                description: "Cell typing based on human cell atlas"
+                placement: 1120
+            Tissue:
+                title: "Cell-type: Tissue"
+                description: "Cell typing based on GTEX dataset"
+                placement: 1130
+            TGCA_Tissue:
+                title: "Cell-type: TGCA tissue"
+                description: "Cell typing based on TGCA normal cells"
+                placement: 1140
+            TGCA_Tumor:
+                title: "Cell-type: TGCA tumor"
+                description: "Cell typing based on TGCA tumor cells"
+                placement: 1150
+    qualimap_stats:
+        section_name: 'QualiMap stats'
+        file_format: "csv"
+        plot_type: "table"
+        format: "{:,.4f}"
+    fail_mapped_samples:
+        section_name: 'WARNING: Fail Alignment Check'
+        description: "List of samples that failed the STAR minimum mapped reads threshold specified via the '--min_mapped_reads' parameter, and hence were ignored for the downstream processing steps."
+        plot_type: 'table'
+        pconfig:
+            id: 'fail_mapped_samples_table'
+            table_title: 'Samples failed mapping threshold'
+            namespace: 'Samples failed mapping threshold'
+            format: '{:.4f}'
+    fail_strand_check:
+        section_name: 'WARNING: Fail Strand Check'
+        description: "List of samples that failed the strandedness check between that provided in the samplesheet and calculated by the <a href='http://rseqc.sourceforge.net/#infer-experiment-py'>RSeQC infer_experiment.py</a> tool."
+        plot_type: 'table'
+        pconfig:
+            id: 'fail_strand_check_table'
+            table_title: 'Samples failed strandedness check'
+            namespace: 'Samples failed strandedness check'
+            format: '{:.4f}'
+
+exclude_modules:
+  - qualimap
+
+disable_version_detection: true
+show_analysis_paths: false
+versions_table_group_header: "Pipeline"
+
+report_section_order:
+  overall_stats:
+    order: 1000
+  qualimap_stats:
+    order: 500
