@@ -1,2 +1,2 @@
-biosampleName,sampleId,reads,readLength,read1,read2
-Expression-test1,Expression-test1_S1_L001,1000000,76,s3://bioskryb-public-data/pipeline_resources/dev-resources/local_test_files/Expression-test1_S1_L001_R1_001.fastq.gz,s3://bioskryb-public-data/pipeline_resources/dev-resources/local_test_files/Expression-test1_S1_L001_R2_001.fastq.gz
+biosampleName,reads,read1,read2
+Expression-test1,1000000,s3://bioskryb-public-data/pipeline_resources/dev-resources/local_test_files/Expression-test1_S1_L001_R1_001.fastq.gz,s3://bioskryb-public-data/pipeline_resources/dev-resources/local_test_files/Expression-test1_S1_L001_R2_001.fastq.gz
