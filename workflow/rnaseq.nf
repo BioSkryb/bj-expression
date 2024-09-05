@@ -66,7 +66,6 @@ workflow RNASEQ_WF {
         ch_multiqc_config
         ch_project_name
         ch_genebody_ref
-        ch_is_fasterq
 
        
     
@@ -120,7 +119,7 @@ workflow RNASEQ_WF {
         ch_fastqs_with_nreads = ch_fastqs.map { sample_name, reads ->
             tuple(sample_name, reads, params.n_reads)
         }
-        SEQTK_WF (ch_fastqs_with_nreads, ch_is_fasterq, params.read_length, params.seqtk_sample_seed, ch_publish_dir, ch_disable_publish)
+        SEQTK_WF (ch_fastqs_with_nreads, false, params.read_length, params.seqtk_sample_seed, ch_publish_dir, ch_disable_publish)
         ch_seqtk_version = SEQTK_WF.out.version
         FastpFull_WF( SEQTK_WF.out.reads, params.two_color_chemistry, params.adapter_sequence, params.adapter_sequence_r2,ch_publish_dir, ch_disable_publish)
         ch_fastp_report = FastpFull_WF.out.report
@@ -333,8 +332,7 @@ workflow {
                 ch_reference_celltype,
                 ch_multiqc_config, 
                 params.project,
-                params.genebody_ref,
-                params.is_fasterq
+                params.genebody_ref
 
              )
            

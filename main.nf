@@ -20,36 +20,15 @@ params.genebody_ref               = params.genomes [ params.genome ] [ 'genebody
 workflow {
     
     printHeader()
-    // Catching fastq or fasterq files
     if ( params.reads ) {
-        
-        if ( params.is_fasterq ) {
-            
-            ch_reads = Channel.fromPath( params.reads )
-
-        } else {
                 
-            ch_reads = Channel.fromFilePairs( params.reads , size: -1 , checkExists: true )
-
-        }
-        
-        ch_reads.ifEmpty{ exit 1, "ERROR: cannot find any fastq or fasterq files matching the pattern: ${params.reads}\nMake sure that the input file exists!" }
+        ch_reads = Channel.fromFilePairs( params.reads , size: -1 , checkExists: true )
+        ch_reads.ifEmpty{ exit 1, "ERROR: cannot find any fastq files matching the pattern: ${params.reads}\nMake sure that the input file exists!" }
 
     } else if ( params.input_csv  ) {
-        
-        if ( params.is_fasterq ) {
-            
-            ch_reads = Channel.fromPath( params.input_csv  ).splitCsv( header:true )
-                            .map { row -> [ row.biosampleName, [ row.read1, row.read2 ] ] }
-                            .flatten()
-
-        } else {
                 
-            ch_reads = Channel.fromPath( params.input_csv  ).splitCsv( header:true )
+        ch_reads = Channel.fromPath( params.input_csv  ).splitCsv( header:true )
                         .map { row -> [ row.biosampleName, [ row.read1, row.read2 ] ] }
-                
-        }
-        
         ch_reads.ifEmpty{ exit 1, "ERROR: Input csv file is empty." }
     }
 
@@ -75,8 +54,7 @@ workflow {
                 ch_reference_celltype,
                 ch_multiqc_config,
                 params.project,
-                params.genebody_ref,
-                params.is_fasterq
+                params.genebody_ref
 
              )
 }

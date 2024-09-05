@@ -1,10 +1,24 @@
 # BJ-Expression
 
-Pipeline processes RNASeq data and assess transcript-level and gene-level quantification
+The BJ-Expression pipeline is a scalable and reproducible bioinformatics pipeline to process RNAseq data and assess transcript-level and gene-level quantification. The pipeline supports both single-end and paired-end data. The pipeline takes raw sequencing data in the form of FASTQ files and performs down-sampling (randomly selecting a fixed, smaller number of reads from the full set of reads) and adapter trimming of FASTQ files. The pipeline then performs transcript-level quantification using the pseudo-alignment method Salmon as well as gene-level quantification using STAR (Spliced Transcripts Alignment to a Reference) and HTSeq.
+
+# Pipeline Overview
+
+The following are the steps and tools that pipeline uses to perform the analyses:
+
+- Subsample the paired-end reads to 200,000 reads using SEQTK SAMPLE to compare metrics across samples
+- Evaluate sequencing quality using FASTP and trim/clip reads
+- Perform transcript-level quantification using the pseudo-alignment method implemented in SALMON
+- Perform splice-aware alignment using STAR
+- Extract primary aligned reads from STAR-based bam using SAMTOOLS
+- Perform gene-level quantification from STAR alignment using the HTSEQ
+- Evaluate STAR alignment (BAM) quality control using QUALIMAP
+- Evaluate cell typing, custom metrics, and perform PCA using custom tools
+- Aggregate the metrics across biosamples and tools to create overall pipeline statistics summary using MULTIQC
 
 # Running locally
 
-Following are instructions for running BJ-Expression in a local Ubuntu 18.04 server
+Following are instructions for running BJ-Expression in a local Ubuntu server
 
 ## Install Java 11
 
@@ -59,26 +73,17 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 cd bj-expression
 ```
 
-## Sentieon License Setup
-
-The Sentieon license is based on a lightweight floating license server process running on one node, and serving licenses though TCP to all other nodes. Normally this license server is running in a special non-computing node on the cluster periphery that has unrestricted access to the outside world through HTTPS, and serves the licenses to the rest of the nodes in the cluster by listening to a specific TCP port that needs to be open within the cluster. The license server needs to have external https access to validate the license, while the computing nodes do not need to have access to the internet.
-
-Client will need to provide FQDN (hostname) or IP address of the machine that they would like to use to host the license server along with the port the license server will listen at to create a license file by Sentieon.
-
-Sentieon license server supports connection through the proxy server. Set the standard `http_proxy` environment before starting the license server.
-
-In order to run Sentieon software will need to start a Sentieon license server on eg. `b06x-pbs01.inet.xxxxxxxxx`; running the following command will setup the license server as a running daemon in your system:
-
-```
-export http_proxy=<proxy_server_name_and_port>
-<SENTIEON_DIR>/bin/sentieon licsrvr --start --log <LOCATION_OF_LOG_FILE> <LICENSE_FILE> 
-```
-To run Sentieon software in the computing nodes, will need to set an environmental variable to tell Sentieon software the location of the license server and port. This can be added to bash profile or to the scripts that will drive the pipelines:
-```
-export SENTIEON_LICENSE=b06x-pbs01.inet.xxxxxxxxxxxx:xxxx
-```
-
 ## Test Pipeline Execution
+
+**Command**
+
+example-
+
+** csv input **
+
+```
+nextflow run main.nf --input_csv $PWD/tests/data/input/input.csv
+```
 
 **Input Options**
 
@@ -92,7 +97,6 @@ biosampleName,reads,read1,read2
 Expression-test1,1000000,s3://bioskryb-data-share/BioSkryb-Testing-Data/genomics/homo_sapiens/GRCh38/illumina/fastq/small/rnaseq/Expression-test1_S1_L001_R1_001.fastq.gz,s3://bioskryb-data-share/BioSkryb-Testing-Data/genomics/homo_sapiens/GRCh38/illumina/fastq/small/rnaseq/Expression-test1_S1_L001_R2_001.fastq.gz
 ```
 
-
 **Optional Modules**
 
 
@@ -103,11 +107,57 @@ This pipeline includes several optional modules. You can choose to include or ex
 
 **Outputs**
 
-
 The pipeline saves its output files in the designated "publish_dir" directory. The bam files after htseq alignment are stored in the "secondary_analyses/alignment_htseq/" subdirectory and the metrics files are saved in the "secondary_analyses/secondary_metrics/" subdirectory.
 
-**nf-test**
+**command options**
 
+```
+  Usage:
+      nextflow run main.nf [options]
+  Script Options: see nextflow.config
+  
+    [required]
+    --reads_csv         FILE    Path to input csv file
+                                
+    --salmon_index      DIR     Path to a folder containing reference salmon indexes 
+                                DEFAULT: null
+                                
+    --star_index        DIR     Path to a folder containing reference star indexes
+                                DEFAULT: null   
+                                
+    --gtf_file          FILE    GTF file containing gene locations
+                                DEFAULT: null
+                                
+                                
+    [optional]
+    
+    --publish_dir       DIR     Path to run output directory
+                                DEFAULT: 
+   
+    --n_reads           VAL     Number of reads to sample for analysis eg. 2.5M == 5M paired reads
+                                DEFAULT: 100000
+    --read_length       VAL     Desired read length for analysis and excess to be trimmed
+                                DEFAULT: 75
+                                
+    --skip_subsampling  STR     Skip Qualimap module
+                                DEFAULT: false
+                                
+    --help              BOOL    Display help message
+
+
+```
+
+**Tool versions**
+
+- `fastp: 0.20.1`
+- `Seqtk: 1.3-r106`
+- `Salmon: 1.6.0`
+- `STAR: 2.7.6a`
+- `QualiMap: 2.2.2-dev`
+- `Samtools: 1.10`
+- `HTSeq: 0.13.5`
+
+**nf-test**
 
 The BioSkryb BJ-Expression nextflow pipeline run is tested using the nf-test framework.
 
