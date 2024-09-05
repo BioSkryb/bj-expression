@@ -27,15 +27,10 @@ def helpMessage() {
   ${red}
     [required]
     --reads_csv         FILE    Path to input csv file
+
+    --genome            STR     Reference genome to use. Available options - GRCh38, GRCm39
+                                DEFAULT: ${params.genome}
                                 
-    --salmon_index      DIR     Path to a folder containing reference salmon indexes 
-                                DEFAULT: ${params.salmon_index}
-                                
-    --star_index        DIR     Path to a folder containing reference star indexes
-                                DEFAULT: ${params.star_index}   
-                                
-    --gtf_file          FILE    GTF file containing gene locations
-                                DEFAULT: ${params.gtf_file}
                                 
   ${yellow}                              
     [optional]
@@ -43,8 +38,9 @@ def helpMessage() {
     --publish_dir       DIR     Path to run output directory
                                 DEFAULT: ${params.publish_dir}
    
-    --n_reads           VAL     Number of reads to sample for analysis eg. 2.5M == 5M paired reads
+    --n_reads           VAL     Number of reads to sample for analysis
                                 DEFAULT: ${params.n_reads}
+
     --read_length       VAL     Desired read length for analysis and excess to be trimmed
                                 DEFAULT: ${params.read_length}
                                 
