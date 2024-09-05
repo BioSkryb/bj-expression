@@ -118,15 +118,9 @@ The pipeline saves its output files in the designated "publish_dir" directory. T
   
     [required]
     --reads_csv         FILE    Path to input csv file
-                                
-    --salmon_index      DIR     Path to a folder containing reference salmon indexes 
-                                DEFAULT: null
-                                
-    --star_index        DIR     Path to a folder containing reference star indexes
-                                DEFAULT: null   
-                                
-    --gtf_file          FILE    GTF file containing gene locations
-                                DEFAULT: null
+
+    --genome            STR     Reference genome to use. Available options - GRCh38, GRCm39
+                                DEFAULT: GRCh38                            
                                 
                                 
     [optional]
@@ -134,8 +128,9 @@ The pipeline saves its output files in the designated "publish_dir" directory. T
     --publish_dir       DIR     Path to run output directory
                                 DEFAULT: 
    
-    --n_reads           VAL     Number of reads to sample for analysis eg. 2.5M == 5M paired reads
+    --n_reads           VAL     Number of reads to sample for analysis
                                 DEFAULT: 100000
+
     --read_length       VAL     Desired read length for analysis and excess to be trimmed
                                 DEFAULT: 75
                                 
@@ -143,8 +138,6 @@ The pipeline saves its output files in the designated "publish_dir" directory. T
                                 DEFAULT: false
                                 
     --help              BOOL    Display help message
-
-
 ```
 
 **Tool versions**
