@@ -1,0 +1,20 @@
+{
+    "pipeline_metrics_summary": {
+        "content": [
+            "qualimap_stats_mqc.csv:md5,f9f9bcb755b3646c8382d379aac86c4a"
+        ],
+        "timestamp": "2024-05-14T14:36:14+0000"
+    },
+    "pipeline_metrics_summary_percents": {
+        "content": [
+            "pipeline_metrics_summary_percents.csv:md5,0cef2eeeb9d50a65000b7ab8109f7e13"
+        ],
+        "timestamp": "2024-05-14T14:36:14+0000"
+    },
+    "df_dynamicrange_expression": {
+        "content": [
+            "df_dynamicrange_expression.tsv:md5,108e27000a74a17170f9c5dfc7dedc82"
+        ],
+        "timestamp": "2024-05-14T14:36:14+0000"
+    }
+}

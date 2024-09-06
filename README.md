@@ -73,6 +73,13 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 cd bj-expression
 ```
 
+## Resources Required
+
+For running the pipeline, a typical dataset requires 8 CPU cores and 50 GB of memory. For larger datasets, you may need to increase the resources to 16 CPU cores and 60 GB of memory. You can specify these resources in the command as follows:
+```
+--max_cpus 8 --max_memory 50.GB
+```
+
 ## Test Pipeline Execution
 
 **Command**
@@ -82,7 +89,7 @@ example-
 ** csv input **
 
 ```
-nextflow run main.nf --input_csv $PWD/tests/data/input/input.csv
+nextflow run main.nf --input_csv $PWD/tests/data/input/input.csv --max_cpus 8 --max_memory 50.GB
 ```
 
 **Input Options**
