@@ -166,6 +166,7 @@ Installation:
 nf-test has the same requirements as Nextflow and can be used on POSIX compatible systems like Linux or OS X. You can install nf-test using the following command:
 ```
 wget -qO- https://code.askimed.com/install/nf-test | bash
+sudo mv nf-test /usr/local/bin/
 ```
 It will create the nf-test executable file in the current directory. Optionally, move the nf-test file to a directory accessible by your $PATH variable.
 
