@@ -1,10 +1,8 @@
 nextflow.enable.dsl=2
-star_cntr = "quay.io/biocontainers/star:2.7.6a--0"
 params.timestamp = ""
 
 process STARALIGN {
   tag "${sample_name}"
-  container star_cntr
   publishDir "${publish_dir}_${params.timestamp}/${task.process.replaceAll(':', '_')}", enabled:"$disable_publish"
 
   input:

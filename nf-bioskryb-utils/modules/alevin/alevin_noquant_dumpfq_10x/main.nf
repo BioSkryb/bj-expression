@@ -1,10 +1,8 @@
 nextflow.enable.dsl=2
-salmon_cntr = "quay.io/biocontainers/salmon:1.6.0--h84f40af_0"
 params.timestamp = ""
 
 process ALEVIN_NOQUANT_DUMPFQ {
   tag "alevin_noquant_dumpfastq_${sample_name}"
-  container salmon_cntr
   publishDir "${publish_dir}_${params.timestamp}/${task.process.replaceAll(':', '_')}", enabled:"$enable_publish"
   
   input:

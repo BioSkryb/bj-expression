@@ -14,7 +14,7 @@ import groovy.json.JsonOutput
 
 include { PUBLISH_INPUT_DATASET_WF } from '../nf-bioskryb-utils/modules/bioskryb/publish_input_dataset/main.nf' addParams(timestamp: params.timestamp)
 include { CUSTOM_FASTQ_MERGE_WF } from '../modules/local/custom_fastq_merge/main.nf' addParams(timestamp: params.timestamp)
-include { PETASUITE_DECOMPRESS_WF } from '../nf-bioskryb-utils/modules/petasuite/decompress/main.nf' addParams(timestamp: params.timestamp)
+// include { PETASUITE_DECOMPRESS_WF } from '../nf-bioskryb-utils/modules/petasuite/decompress/main.nf' addParams(timestamp: params.timestamp)
 include { SEQTK_WF } from '../nf-bioskryb-utils/modules/seqtk/sample/main.nf' addParams(timestamp: params.timestamp)
 include { FastpFull_WF } from '../nf-bioskryb-utils/modules/fastp/main.nf' addParams(timestamp: params.timestamp)
 include { SALMONQUANT } from '../nf-bioskryb-utils/modules/salmon/main.nf' addParams(timestamp: params.timestamp)
@@ -31,7 +31,7 @@ include { CELL_TYPING } from '../modules/local/custom_cell_typing/main.nf' addPa
 include { CREATE_QC_REPORT } from '../modules/local/custom_qc_report/main.nf' addParams(timestamp: params.timestamp)
 include { MULTIQC_WF } from '../nf-bioskryb-utils/modules/multiqc/main.nf' addParams(timestamp: params.timestamp)
 include { REPORT_VERSIONS_WF } from '../nf-bioskryb-utils/modules/bioskryb/report_tool_versions/main.nf' addParams(timestamp: params.timestamp)
-include { CUSTOM_PIPELINE_JSON_OUTPUT } from '../modules/local/custom_pipeline_json_output/main.nf' addParams(timestamp: params.timestamp)
+// include { CUSTOM_PIPELINE_JSON_OUTPUT } from '../modules/local/custom_pipeline_json_output/main.nf' addParams(timestamp: params.timestamp)
 include { CREATE_HTSEQ_MATRIX } from '../modules/local/custom_starpostprocess/create_htseq_matrix/main.nf' addParams(timestamp: params.timestamp)
 include { CREATE_MATRIX_SALMON_TX_GENE } from '../modules/local/custom_salmonpostprocess/create_matrix_salmon_tx_gene/main.nf' addParams(timestamp: params.timestamp)
 include { GENE_BODY_COVERAGE_RNA } from '../modules/local/gene_body_rna/main.nf' addParams(timestamp: params.timestamp)

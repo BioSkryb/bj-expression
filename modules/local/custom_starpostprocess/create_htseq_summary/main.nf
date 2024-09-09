@@ -1,11 +1,9 @@
 nextflow.enable.dsl=2
-r_nf_rnaseq_cntr = "597246834581.dkr.ecr.us-east-1.amazonaws.com/miscellaneous:custom_r_nf_rnaseq_0.8"
 params.timestamp = ""
 
 process CREATE_HTSEQ_SUMMARY {
     tag "create_htseq_summary"
     publishDir "${publish_dir}_${params.timestamp}/${task.process.replaceAll(':', '_')}", enabled:"$enable_publish"
-    container r_nf_rnaseq_cntr
 
     input:
     path(htseq_file)

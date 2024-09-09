@@ -1,10 +1,8 @@
 nextflow.enable.dsl=2
-r_nf_rnaseq_cntr = "597246834581.dkr.ecr.us-east-1.amazonaws.com/miscellaneous:custom_r_nf_rnaseq_0.4"
 
 process MERGE_HTSEQ_SUMMARY {
     tag "merge_htseq_summary"
     publishDir "${publish_dir}_${params.timestamp}/secondary_analyses/quantification_htseq/", enabled:"$enable_publish"
-    container r_nf_rnaseq_cntr
     
     input:
     path(df_files)

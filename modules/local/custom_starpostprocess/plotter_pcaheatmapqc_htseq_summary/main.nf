@@ -1,12 +1,10 @@
 nextflow.enable.dsl=2
-r_nf_rnaseq_cntr = "597246834581.dkr.ecr.us-east-1.amazonaws.com/miscellaneous:custom_r_nf_rnaseq_0.4"
 params.timestamp = ""
 
 
 process PLOTTER_PCAHEATMAP_HTSEQ_SUMMARY {
     tag "plotter_pcaheatmap"
     publishDir "${publish_dir}_${params.timestamp}/${task.process.replaceAll(':', '_')}", enabled:"$enable_publish"
-    container r_nf_rnaseq_cntr
     
     input:
     path(tsv_files)
