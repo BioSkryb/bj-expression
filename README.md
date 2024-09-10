@@ -16,7 +16,7 @@ The following are the steps and tools that pipeline uses to perform the analyses
 - Evaluate cell typing, custom metrics, and perform PCA using custom tools
 - Aggregate the metrics across biosamples and tools to create overall pipeline statistics summary using MULTIQC
 
-# Running locally
+# Running Locally
 
 Following are instructions for running BJ-Expression in a local Ubuntu server
 
@@ -26,9 +26,6 @@ Following are instructions for running BJ-Expression in a local Ubuntu server
 sudo apt-get install default-jdk
 
 java -version
-#openjdk version "11.0.18" 2023-01-17
-#OpenJDK Runtime Environment (build 11.0.18+10-post-Ubuntu-0ubuntu118.04.1)
-#OpenJDK 64-Bit Server VM (build 11.0.18+10-post-Ubuntu-0ubuntu118.04.1, mixed mode, sharing)
 ```
 
 ## Install AWS CLI
@@ -68,11 +65,6 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 ```
 
-## Download and Unzip Pipeline Repository
-```
-cd bj-expression
-```
-
 ## Resources Required
 
 For running the pipeline, a typical dataset requires 8 CPU cores and 50 GB of memory. For larger datasets, you may need to increase the resources to 16 CPU cores and 60 GB of memory. You can specify these resources in the command as follows:
@@ -82,6 +74,8 @@ For running the pipeline, a typical dataset requires 8 CPU cores and 50 GB of me
 
 ## Test Pipeline Execution
 
+All pipeline resources are publically available at `s3://bioskryb-public-data/pipeline_resources` users need not have to download this, and will be downloaded during nextflow run.
+
 **Command**
 
 example-
@@ -89,6 +83,8 @@ example-
 ** csv input **
 
 ```
+git clone https://github.com/BioSkryb/bj-expression.git
+cd bj-expression
 nextflow run main.nf --input_csv $PWD/tests/data/input/input.csv --max_cpus 8 --max_memory 50.GB
 ```
 
@@ -114,7 +110,7 @@ This pipeline includes several optional modules. You can choose to include or ex
 
 **Outputs**
 
-The pipeline saves its output files in the designated "publish_dir" directory. The bam files after htseq alignment are stored in the "secondary_analyses/alignment_htseq/" subdirectory and the metrics files are saved in the "secondary_analyses/secondary_metrics/" subdirectory.
+The pipeline saves its output files in the designated "publish_dir" directory. The bam files after htseq alignment are stored in the "secondary_analyses/alignment_htseq/" subdirectory and the metrics files are saved in the "secondary_analyses/secondary_metrics/" subdirectory. For details: [BJ-Expression Outputs](https://docs.basejumper.bioskryb.com/pipelines/secondary/bj-dna-qc/1.9.1/docs/#output-directories)
 
 **command options**
 
