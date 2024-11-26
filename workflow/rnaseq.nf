@@ -40,6 +40,7 @@ include { CREATE_MASTER_STATS } from '../modules/local/create_master_stats/main.
 include { ALEVIN_NOQUANT_DUMPFQ } from  '../nf-bioskryb-utils/modules/alevin/alevin_noquant_dumpfq_10x/main.nf' addParams(timestamp: params.timestamp)
 include { CUSTOM_AWK_DEMUX_CBC_FASTQ } from  '../modules/local/custom_10x_demux/awk_demux_cbc_fastq/main.nf' addParams(timestamp: params.timestamp)
 include { CALC_DYNAMICRANGE } from '../modules/local/custom_dynamicrange_report/main.nf' addParams(timestamp: params.timestamp)
+include { COUNT_READS_FASTQ_WF } from '../nf-bioskryb-utils/modules/bioskryb/custom_read_counts/main.nf' addParams(timestamp: params.timestamp)
 
 
 //include { STARFUSION_WF } from  '../nf-bioskryb-utils/modules/starFusion/main.nf' addParams(timestamp: params.timestamp)
@@ -66,6 +67,7 @@ workflow RNASEQ_WF {
         ch_multiqc_config
         ch_project_name
         ch_genebody_ref
+        ch_min_reads
 
        
     
@@ -100,10 +102,28 @@ workflow RNASEQ_WF {
                                         ch_publish_dir,
                                         ch_enable_publish
                                     )
+
         } else {
             ch_input_csv = Channel.of(file("NO_FILE"))
         }
-        ch_fastqs = ch_reads
+        COUNT_READS_FASTQ_WF (
+                                    ch_reads,
+                                    params.publish_dir,
+                                    params.enable_publish
+                                )
+            COUNT_READS_FASTQ_WF.out.read_counts
+            .map { sample_id, files, read_count -> 
+                [sample_id, files, read_count.toInteger()]
+            }
+            .branch {
+                small: it[2] < ch_min_reads
+                large: it[2] >= ch_min_reads
+            }
+            .set { branched_reads }
+        
+        ch_fastqs = branched_reads.large.map { sample_id, files, read_count ->
+            tuple(sample_id, files)
+        }
     }
     
     ch_seqtk_version = Channel.empty()
@@ -218,7 +238,7 @@ workflow RNASEQ_WF {
 
     }
 
-    CREATE_MASTER_STATS (collect_master_stats , ch_input_csv, ch_publish_dir, ch_disable_publish)
+    CREATE_MASTER_STATS (collect_master_stats , COUNT_READS_FASTQ_WF.out.combined_read_counts, ch_publish_dir, ch_disable_publish)
     
 
     ch_tool_versions = ch_fastp_version.take(1)
@@ -332,7 +352,8 @@ workflow {
                 ch_reference_celltype,
                 ch_multiqc_config, 
                 params.project,
-                params.genebody_ref
+                params.genebody_ref,
+                params.min_reads
 
              )
            
