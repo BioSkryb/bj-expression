@@ -43,6 +43,9 @@ def helpMessage() {
 
     --read_length       VAL     Desired read length for analysis and excess to be trimmed
                                 DEFAULT: ${params.read_length}
+
+    --min_reads         VAL       Minimum number of reads required for analysis.
+                                DEFAULT: ${params.min_reads}
                                 
     --skip_subsampling  STR     Skip Qualimap module
                                 DEFAULT: ${params.skip_subsampling}

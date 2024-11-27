@@ -6,7 +6,7 @@ process CREATE_MASTER_STATS {
 
     input:
     path(df_files)
-    path(input_csv)
+    path(reads_csv)
     val(publish_dir)
     val(disable_publish)
 
@@ -18,7 +18,7 @@ process CREATE_MASTER_STATS {
     """
     
     
-    Rscript  /usr/local/bin/create_master_stats_scrnaseqwf.R ${input_csv}
+    Rscript  /usr/local/bin/create_master_stats_scrnaseqwf.R ${reads_csv}
 
     
     """

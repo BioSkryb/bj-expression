@@ -92,12 +92,12 @@ nextflow run main.nf --input_csv $PWD/tests/data/input/input.csv --max_cpus 8 --
 
 The input for the pipeline is passed via a input.csv with a meta data.
 
-- **CSV Metadata Input**: The CSV file should have 4 columns: `biosampleName`, `reads`, `read1` and `read2`. 
-The `biosampleName` column contains the name of the biosample, `reads` have the number of reads and `read1` and `read2` has the path to the input reads. For example:
+- **CSV Metadata Input**: The CSV file should have 4 columns: `biosampleName`, `read1` and `read2`. 
+The `biosampleName` column contains the name of the biosample, `read1` and `read2` has the path to the input reads. For example:
 
 ```
-biosampleName,reads,read1,read2
-Expression-test1,1000000,s3://bioskryb-data-share/BioSkryb-Testing-Data/genomics/homo_sapiens/GRCh38/illumina/fastq/small/rnaseq/Expression-test1_S1_L001_R1_001.fastq.gz,s3://bioskryb-data-share/BioSkryb-Testing-Data/genomics/homo_sapiens/GRCh38/illumina/fastq/small/rnaseq/Expression-test1_S1_L001_R2_001.fastq.gz
+biosampleName,read1,read2
+Expression-test1,s3://bioskryb-data-share/BioSkryb-Testing-Data/genomics/homo_sapiens/GRCh38/illumina/fastq/small/rnaseq/Expression-test1_S1_L001_R1_001.fastq.gz,s3://bioskryb-data-share/BioSkryb-Testing-Data/genomics/homo_sapiens/GRCh38/illumina/fastq/small/rnaseq/Expression-test1_S1_L001_R2_001.fastq.gz
 ```
 
 **Optional Modules**
@@ -136,6 +136,9 @@ The pipeline saves its output files in the designated "publish_dir" directory. T
 
     --read_length       VAL     Desired read length for analysis and excess to be trimmed
                                 DEFAULT: 75
+
+    --min_reads         VAL       Minimum number of reads required for analysis.
+                                DEFAULT: 5000
                                 
     --skip_subsampling  STR     Skip Qualimap module
                                 DEFAULT: false

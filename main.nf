@@ -54,7 +54,8 @@ workflow {
                 ch_reference_celltype,
                 ch_multiqc_config,
                 params.project,
-                params.genebody_ref
+                params.genebody_ref,
+                params.min_reads
 
              )
 }
