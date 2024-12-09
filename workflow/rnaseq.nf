@@ -111,7 +111,7 @@ workflow RNASEQ_WF {
                                     params.publish_dir,
                                     params.enable_publish
                                 )
-            COUNT_READS_FASTQ_WF.out.read_counts
+        COUNT_READS_FASTQ_WF.out.read_counts
             .map { sample_id, files, read_count -> 
                 [sample_id, files, read_count.toInteger()]
             }
@@ -146,8 +146,25 @@ workflow RNASEQ_WF {
         ch_fastp_version = FastpFull_WF.out.version
         
      }
+
+    // Process fastp output and branch based on filtered read count
+    FastpFull_WF.out.reads
+        .join(FastpFull_WF.out.json)
+        .map { sample_id, reads, json -> 
+            def fastp_data = new groovy.json.JsonSlurper().parseText(json.text)
+            def read_count = fastp_data.summary.after_filtering.total_reads
+            [sample_id, reads, read_count]
+        }
+        .branch {
+            small: it[2] < params.min_reads
+            large: it[2] >= params.min_reads
+        }
+        .set { branched_reads_after_filter }
+    ch_fastqs_filtered_poor_quality_samples = branched_reads_after_filter.large.map { sample_id, reads, read_count ->
+            tuple(sample_id, reads)
+    }
               
-    SALMONQUANT (FastpFull_WF.out.reads, ch_salmon_index, ch_publish_dir, ch_disable_publish)
+    SALMONQUANT (ch_fastqs_filtered_poor_quality_samples, ch_salmon_index, ch_publish_dir, ch_disable_publish)
     ch_salmon_report = SALMONQUANT.out.outdir
     ch_salmon_version = SALMONQUANT.out.version
     
@@ -157,7 +174,7 @@ workflow RNASEQ_WF {
     ch_qunt_merge_tsv = MERGE_TXIMPORT_SALMON_TX_GENE_WF.out.quant_merge_tsv
     CREATE_MATRIX_SALMON_TX_GENE ( ch_qunt_merge_tsv, ch_publish_dir, ch_enable_publish )
 
-    STARALIGN ( FastpFull_WF.out.reads, ch_star_index, ch_publish_dir,ch_disable_publish)
+    STARALIGN ( ch_fastqs_filtered_poor_quality_samples, ch_star_index, ch_publish_dir,ch_disable_publish)
     ch_star_report = STARALIGN.out.outdir
     ch_star_version = STARALIGN.out.version
     ch_junction_file = STARALIGN.out.junction
