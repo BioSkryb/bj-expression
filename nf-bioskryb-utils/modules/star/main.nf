@@ -3,7 +3,7 @@ params.timestamp = ""
 
 process STARALIGN {
   tag "${sample_name}"
-  publishDir "${publish_dir}_${params.timestamp}/${task.process.replaceAll(':', '_')}", enabled:"$disable_publish"
+  publishDir "${publish_dir}_${params.timestamp}/${task.process.replaceAll(':', '_')}", enabled:"$enable_publish"
 
   input:
   tuple val(sample_name), path(reads)
@@ -80,7 +80,7 @@ workflow STAR_WF{
 
 workflow{
     ch_reads = Channel.fromFilePairs( params.reads , size: -1 , checkExists: true )
-                            .map { tag, pair -> subtags = (tag =~ /(.*)_(S\d+)_(L0+\d+)/)[0]; [subtags[1], subtags[2], subtags[3], pair] }
+                            .map { tag, pair -> def subtags = (tag =~ /(.*)_(S\d+)_(L0+\d+)/)[0]; [subtags[1], subtags[2], subtags[3], pair] }
     STAR_WF (
                         ch_reads,
                         params.star_index,

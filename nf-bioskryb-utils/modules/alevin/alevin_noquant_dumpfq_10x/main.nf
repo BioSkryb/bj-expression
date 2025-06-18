@@ -74,7 +74,7 @@ workflow ALEVIN_NOQUANT_DUMPFQ_WF{
 
 workflow{
     ch_reads = Channel.fromFilePairs( params.reads , size: -1 , checkExists: true )
-                            .map { tag, pair -> subtags = (tag =~ /(.*)_(S\d+)_(L0+\d+)/)[0]; [subtags[1], subtags[2], subtags[3], pair] }
+                            .map { tag, pair -> def subtags = (tag =~ /(.*)_(S\d+)_(L0+\d+)/)[0]; [subtags[1], subtags[2], subtags[3], pair] }
     ALEVIN_NOQUANT_DUMPFQ_WF  (
                         ch_reads,
                         params.salmon_index,
