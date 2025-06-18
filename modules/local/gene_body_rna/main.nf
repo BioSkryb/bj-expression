@@ -2,7 +2,7 @@ nextflow.enable.dsl=2
 
 process GENE_BODY_COVERAGE_RNA {
   tag "${sample_name}_GENE_BODY_COVERAGE_RNA"
-  publishDir "${publish_dir}_${params.timestamp}/${task.process.replaceAll(':', '_')}", enabled:"$disable_publish"
+  publishDir "${params.publish_dir}_${params.timestamp}/${task.process.replaceAll(':', '_')}", enabled:"$disable_publish"
 
 
   input:

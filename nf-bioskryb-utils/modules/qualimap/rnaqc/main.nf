@@ -3,7 +3,7 @@ params.publish_dir = ""
 
 process QUALIMAP_BAMRNA {
   tag "${sample_name}"
-  publishDir "${publish_dir}_${params.timestamp}/${task.process.replaceAll(':', '_')}", enabled:"$disable_publish"
+  publishDir "${publish_dir}_${params.timestamp}/${task.process.replaceAll(':', '_')}", enabled:"$enable_publish"
 
     
   input:
@@ -72,7 +72,7 @@ workflow{
                           { file -> file.name.replaceAll(/.bam|.bai$/,'') }
             .mix ( Channel
                         .fromFilePairs( params.bam_dir + '/*.{bam,bai}', size: -1 )
-                        { file -> file.name.replaceAll(/.bam|.bai$/,'') } )
+                        ) { file -> file.name.replaceAll(/.bam|.bai$/,'') }
             .set { ch_bam }
             
     QUALIMAP_BAMRNA (
