@@ -107,6 +107,7 @@ This pipeline includes several optional modules. You can choose to include or ex
 
 - `--skip_subsampling`: Set this to `true` to exclude the subsampling module. By default, it is set to `true`.
 - `--skip_fastq_merge`: Set this to `true` to exclude the fastq merge module. By default, it is set to `false`.
+- `--skip_cutadapt`: Set this to `true` to exclude the CUTADAPT module. By default, it is set to `false`.
 
 **Outputs**
 
@@ -141,6 +142,9 @@ The pipeline saves its output files in the designated "publish_dir" directory. T
                                 DEFAULT: 5000
                                 
     --skip_subsampling  STR     Skip Qualimap module
+                                DEFAULT: false
+
+    --skip_cutadapt     BOOL    Skip cutadapt module
                                 DEFAULT: false
                                 
     --help              BOOL    Display help message

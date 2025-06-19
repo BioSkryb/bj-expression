@@ -11,6 +11,8 @@ nextflow_pipeline {
                 publish_dir = "${outputDir}/results"
                 timestamp = "test"
                 architecture = "x86"
+                max_memory = "50.GB"
+                max_cpus = 8
             }
         }
 

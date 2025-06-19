@@ -57,20 +57,3 @@ workflow  STARGETPRIM_WF{
 
 
 }
-
-workflow{
-   
-   Channel
-            .fromFilePairs( params.bam_dir + '/*/*.{bam,bai}', size: -1 )
-                          { file -> file.name.replaceAll(/.bam|.bai$/,'') }
-            .mix ( Channel
-                        .fromFilePairs( params.bam_dir + '/*.{bam,bai}', size: -1 )
-                        { file -> file.name.replaceAll(/.bam|.bai$/,'') } )
-            .set { ch_bam }
-   
-    STARGETPRIM_WF(
-                       ch_bam,
-                       params.publish_dir,
-                       params.enable_publish
-                     )
-}

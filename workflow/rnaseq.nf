@@ -1,6 +1,3 @@
-nextflow.enable.dsl=2
-import groovy.json.JsonOutput
-
 /*
 ========================================================================================
     IMPORT MODULES/SUBWORKFLOWS
@@ -12,39 +9,40 @@ import groovy.json.JsonOutput
 // MODULES
 //
 
-include { PUBLISH_INPUT_DATASET_WF } from '../nf-bioskryb-utils/modules/bioskryb/publish_input_dataset/main.nf' addParams(timestamp: params.timestamp)
-include { CUSTOM_FASTQ_MERGE_WF } from '../modules/local/custom_fastq_merge/main.nf' addParams(timestamp: params.timestamp)
-// include { PETASUITE_DECOMPRESS_WF } from '../nf-bioskryb-utils/modules/petasuite/decompress/main.nf' addParams(timestamp: params.timestamp)
-include { SEQTK_WF } from '../nf-bioskryb-utils/modules/seqtk/sample/main.nf' addParams(timestamp: params.timestamp)
-include { FastpFull_WF } from '../nf-bioskryb-utils/modules/fastp/main.nf' addParams(timestamp: params.timestamp)
-include { SALMONQUANT } from '../nf-bioskryb-utils/modules/salmon/main.nf' addParams(timestamp: params.timestamp)
-include { CREATE_TXIMPORT_SALMON_TX_GENE } from '../modules/local/custom_salmonpostprocess/create_tximport_salmon_tx_gene/main.nf' addParams(timestamp: params.timestamp)
-include { MERGE_TXIMPORT_SALMON_TX_GENE_WF } from '../modules/local/custom_salmonpostprocess/merge_tximport_salmon_tx_gene/main.nf' addParams(timestamp: params.timestamp)
-include { STARALIGN } from '../nf-bioskryb-utils/modules/star/main.nf' addParams(timestamp: params.timestamp)
-include { QUALIMAP_BAMRNA } from '../nf-bioskryb-utils/modules/qualimap/rnaqc/main.nf' addParams(timestamp: params.timestamp)
-include { STARGETPRIM_WF } from '../modules/local/custom_stargetprim/main.nf' addParams(timestamp: params.timestamp)
-include { HTSEQ_COUNTS } from '../nf-bioskryb-utils/modules/htseq/main.nf' addParams(timestamp: params.timestamp)
-include { CREATE_HTSEQ_SUMMARY_WF } from '../modules/local/custom_starpostprocess/create_htseq_summary/main.nf' addParams(timestamp: params.timestamp)
-include { MERGE_HTSEQ_SUMMARY_WF } from '../modules/local/custom_starpostprocess/merge_htseq_summary/main.nf' addParams(timestamp: params.timestamp)
-include { PLOTTER_PCAHEATMAP_HTSEQ_SUMMARY_WF } from '../modules/local/custom_starpostprocess/plotter_pcaheatmapqc_htseq_summary/main.nf' addParams( imestamp: params.timestamp)
-include { CELL_TYPING } from '../modules/local/custom_cell_typing/main.nf' addParams(timestamp: params.timestamp)
-include { CREATE_QC_REPORT } from '../modules/local/custom_qc_report/main.nf' addParams(timestamp: params.timestamp)
-include { MULTIQC_WF } from '../nf-bioskryb-utils/modules/multiqc/main.nf' addParams(timestamp: params.timestamp)
-include { REPORT_VERSIONS_WF } from '../nf-bioskryb-utils/modules/bioskryb/report_tool_versions/main.nf' addParams(timestamp: params.timestamp)
-// include { CUSTOM_PIPELINE_JSON_OUTPUT } from '../modules/local/custom_pipeline_json_output/main.nf' addParams(timestamp: params.timestamp)
-include { CREATE_HTSEQ_MATRIX } from '../modules/local/custom_starpostprocess/create_htseq_matrix/main.nf' addParams(timestamp: params.timestamp)
-include { CREATE_MATRIX_SALMON_TX_GENE } from '../modules/local/custom_salmonpostprocess/create_matrix_salmon_tx_gene/main.nf' addParams(timestamp: params.timestamp)
-include { GENE_BODY_COVERAGE_RNA } from '../modules/local/gene_body_rna/main.nf' addParams(timestamp: params.timestamp)
-include { GENE_BODY_COVERAGE_RNA_PLOT } from '../modules/local/gene_body_rna_plot_all/main.nf' addParams(timestamp: params.timestamp)
-include { CREATE_MASTER_STATS } from '../modules/local/create_master_stats/main.nf' addParams(timestamp: params.timestamp)
-include { ALEVIN_NOQUANT_DUMPFQ } from  '../nf-bioskryb-utils/modules/alevin/alevin_noquant_dumpfq_10x/main.nf' addParams(timestamp: params.timestamp)
-include { CUSTOM_AWK_DEMUX_CBC_FASTQ } from  '../modules/local/custom_10x_demux/awk_demux_cbc_fastq/main.nf' addParams(timestamp: params.timestamp)
-include { CALC_DYNAMICRANGE } from '../modules/local/custom_dynamicrange_report/main.nf' addParams(timestamp: params.timestamp)
-include { COUNT_READS_FASTQ_WF } from '../nf-bioskryb-utils/modules/bioskryb/custom_read_counts/main.nf' addParams(timestamp: params.timestamp)
+include { PUBLISH_INPUT_DATASET_WF } from '../nf-bioskryb-utils/modules/bioskryb/publish_input_dataset/main.nf'
+include { CUSTOM_FASTQ_MERGE_WF } from '../modules/local/custom_fastq_merge/main.nf'
+// include { PETASUITE_DECOMPRESS_WF } from '../nf-bioskryb-utils/modules/petasuite/decompress/main.nf'
+include { SEQTK_WF } from '../nf-bioskryb-utils/modules/seqtk/sample/main.nf'
+include { FastpFull_WF } from '../nf-bioskryb-utils/modules/fastp/main.nf'
+include { SALMONQUANT } from '../nf-bioskryb-utils/modules/salmon/main.nf'
+include { CREATE_TXIMPORT_SALMON_TX_GENE } from '../modules/local/custom_salmonpostprocess/create_tximport_salmon_tx_gene/main.nf'
+include { MERGE_TXIMPORT_SALMON_TX_GENE_WF } from '../modules/local/custom_salmonpostprocess/merge_tximport_salmon_tx_gene/main.nf'
+include { STARALIGN } from '../nf-bioskryb-utils/modules/star/main.nf'
+include { QUALIMAP_BAMRNA } from '../nf-bioskryb-utils/modules/qualimap/rnaqc/main.nf'
+include { STARGETPRIM_WF } from '../modules/local/custom_stargetprim/main.nf'
+include { HTSEQ_COUNTS } from '../nf-bioskryb-utils/modules/htseq/main.nf'
+include { CREATE_HTSEQ_SUMMARY_WF } from '../modules/local/custom_starpostprocess/create_htseq_summary/main.nf'
+include { MERGE_HTSEQ_SUMMARY_WF } from '../modules/local/custom_starpostprocess/merge_htseq_summary/main.nf'
+include { PLOTTER_PCAHEATMAP_HTSEQ_SUMMARY_WF } from '../modules/local/custom_starpostprocess/plotter_pcaheatmapqc_htseq_summary/main.nf'
+include { CELL_TYPING } from '../modules/local/custom_cell_typing/main.nf'
+include { CREATE_QC_REPORT } from '../modules/local/custom_qc_report/main.nf'
+include { MULTIQC_WF } from '../nf-bioskryb-utils/modules/multiqc/main.nf'
+include { REPORT_VERSIONS_WF } from '../nf-bioskryb-utils/modules/bioskryb/report_tool_versions/main.nf'
+// include { CUSTOM_PIPELINE_JSON_OUTPUT } from '../modules/local/custom_pipeline_json_output/main.nf'
+include { CREATE_HTSEQ_MATRIX } from '../modules/local/custom_starpostprocess/create_htseq_matrix/main.nf'
+include { CREATE_MATRIX_SALMON_TX_GENE } from '../modules/local/custom_salmonpostprocess/create_matrix_salmon_tx_gene/main.nf'
+include { GENE_BODY_COVERAGE_RNA } from '../modules/local/gene_body_rna/main.nf'
+include { GENE_BODY_COVERAGE_RNA_PLOT } from '../modules/local/gene_body_rna_plot_all/main.nf'
+include { CREATE_MASTER_STATS } from '../modules/local/create_master_stats/main.nf'
+include { ALEVIN_NOQUANT_DUMPFQ } from  '../nf-bioskryb-utils/modules/alevin/alevin_noquant_dumpfq_10x/main.nf'
+include { CUSTOM_AWK_DEMUX_CBC_FASTQ } from  '../modules/local/custom_10x_demux/awk_demux_cbc_fastq/main.nf'
+include { CALC_DYNAMICRANGE } from '../modules/local/custom_dynamicrange_report/main.nf'
+include { COUNT_READS_FASTQ_WF } from '../nf-bioskryb-utils/modules/bioskryb/custom_read_counts/main.nf'
+include { CUTADAPT } from '../nf-bioskryb-utils/modules/cutadapt/main.nf'
 
 
-//include { STARFUSION_WF } from  '../nf-bioskryb-utils/modules/starFusion/main.nf' addParams(timestamp: params.timestamp)
-//include { MERGE_STAR_FUSION } from '../modules/local/custom_starpostprocess/merge_starfusion/main.nf' addParams(timestamp: params.timestamp)
+//include { STARFUSION_WF } from  '../nf-bioskryb-utils/modules/starFusion/main.nf'
+//include { MERGE_STAR_FUSION } from '../modules/local/custom_starpostprocess/merge_starfusion/main.nf'
 
 
 
@@ -65,21 +63,31 @@ workflow RNASEQ_WF {
         ch_tx2gene
         ch_reference_celltype
         ch_multiqc_config
-        ch_project_name
         ch_genebody_ref
         ch_min_reads
+        ch_skip_10X
+        ch_lib_type_10x
+        ch_lib_protocol_10x
+        ch_skip_subsampling
+        ch_n_reads
+        ch_read_length
+        ch_seqtk_sample_seed
+        ch_two_color_chemistry
+        ch_celltype_ref
+        ch_instrument
+        ch_genome
+        ch_tmp_dir
+        ch_timestamp
 
-       
-    
     main:
     
-    if( ! params.skip_10X ){
+    if( ! ch_skip_10X ){
     
       ALEVIN_NOQUANT_DUMPFQ ( ch_reads, 
                                 ch_salmon_index,
                                 ch_tx2gene,
-                                params.lib_type_10x,
-                                params.lib_protocol_10x,
+                                ch_lib_type_10x,
+                                ch_lib_protocol_10x,
                                 ch_publish_dir,
                                 ch_disable_publish
        )
@@ -95,7 +103,7 @@ workflow RNASEQ_WF {
         
     }else{
     
-        if ( params.input_csv  ) {
+        if ( ch_input_csv  ) {
             
             PUBLISH_INPUT_DATASET_WF (
                                         ch_input_csv,
@@ -108,16 +116,17 @@ workflow RNASEQ_WF {
         }
         COUNT_READS_FASTQ_WF (
                                     ch_reads,
-                                    params.publish_dir,
-                                    params.enable_publish
+                                    ch_publish_dir,
+                                    ch_enable_publish
                                 )
         COUNT_READS_FASTQ_WF.out.read_counts
-            .map { sample_id, files, read_count -> 
-                [sample_id, files, read_count.toInteger()]
+            .map { sample_id, files, read_count_file -> 
+                def read_count = read_count_file.text.trim().toLong()
+                [sample_id, files, read_count]
             }
-            .branch {
-                small: it[2] < ch_min_reads
-                large: it[2] >= ch_min_reads
+            .branch { read ->
+                small: read[2] < ch_min_reads
+                large: read[2] >= ch_min_reads
             }
             .set { branched_reads }
         
@@ -128,22 +137,34 @@ workflow RNASEQ_WF {
     ch_fastp_report = Channel.empty()
     ch_fastp_version = Channel.empty()
     
-    if ( !params.skip_subsampling ) {
+    if ( !ch_skip_subsampling ) {
         // Run sub sampling followed by fastp only when subsampling is enabled 
         // and when there are reads with min threshold
         if (branched_reads.large.ifEmpty { false }) {
             ch_fastqs_with_nreads = ch_fastqs.map { sample_name, reads ->
-                tuple(sample_name, reads, params.n_reads)
+                tuple(sample_name, reads, ch_n_reads)
             }
-            SEQTK_WF (ch_fastqs_with_nreads, false, params.read_length, params.seqtk_sample_seed, ch_publish_dir, ch_disable_publish)
+            SEQTK_WF (ch_fastqs_with_nreads, false, ch_read_length, ch_seqtk_sample_seed, ch_publish_dir, ch_disable_publish)
             ch_seqtk_version = SEQTK_WF.out.version
-            FastpFull_WF( SEQTK_WF.out.reads, params.two_color_chemistry, params.adapter_sequence, params.adapter_sequence_r2,ch_publish_dir, ch_disable_publish)
+
+            if (!params.skip_cutadapt) {
+                CUTADAPT ( SEQTK_WF.out.reads, ch_adapter_sequence, ch_adapter_sequence_r2, ch_publish_dir, ch_disable_publish)
+                FastpFull_WF( CUTADAPT.out.reads, ch_two_color_chemistry, ch_adapter_sequence, ch_adapter_sequence_r2, ch_publish_dir, ch_disable_publish)
+            } else {
+                FastpFull_WF( SEQTK_WF.out.reads, ch_two_color_chemistry, ch_adapter_sequence, ch_adapter_sequence_r2, ch_publish_dir, ch_disable_publish)
+            }
             ch_fastp_report = FastpFull_WF.out.report
             ch_fastp_version = FastpFull_WF.out.version
         }
     } else {
 
-        FastpFull_WF(ch_fastqs, params.two_color_chemistry, params.adapter_sequence, params.adapter_sequence_r2,ch_publish_dir, ch_disable_publish)
+        if (!params.skip_cutadapt) {
+            CUTADAPT ( ch_fastqs, ch_adapter_sequence, ch_adapter_sequence_r2, ch_publish_dir, ch_disable_publish)
+            FastpFull_WF(CUTADAPT.out.reads, ch_two_color_chemistry, ch_adapter_sequence, ch_adapter_sequence_r2, ch_publish_dir, ch_disable_publish)
+        } else {
+            FastpFull_WF(ch_fastqs, ch_two_color_chemistry, ch_adapter_sequence, ch_adapter_sequence_r2, ch_publish_dir, ch_disable_publish)
+        }
+        
         ch_fastp_report = FastpFull_WF.out.report
         ch_fastp_version = FastpFull_WF.out.version
         
@@ -157,12 +178,12 @@ workflow RNASEQ_WF {
             def read_count = fastp_data.summary.after_filtering.total_reads
             [sample_id, reads, read_count]
         }
-        .branch {
-            small: it[2] < params.min_reads
-            large: it[2] >= params.min_reads
+        .branch { read ->
+            small: read[2] < ch_min_reads
+            large: read[2] >= ch_min_reads
         }
         .set { branched_reads_after_filter }
-    ch_fastqs_filtered_poor_quality_samples = branched_reads_after_filter.large.map { sample_id, reads, read_count ->
+    ch_fastqs_filtered_poor_quality_samples = branched_reads_after_filter.large.map { sample_id, reads, _read_count ->
             tuple(sample_id, reads)
     }
               
@@ -179,19 +200,19 @@ workflow RNASEQ_WF {
     STARALIGN ( ch_fastqs_filtered_poor_quality_samples, ch_star_index, ch_publish_dir,ch_disable_publish)
     ch_star_report = STARALIGN.out.outdir
     ch_star_version = STARALIGN.out.version
-    ch_junction_file = STARALIGN.out.junction
+    // ch_junction_file = STARALIGN.out.junction
     
     STARGETPRIM_WF ( STARALIGN.out.bam, ch_publish_dir, ch_enable_publish)
     ch_stargetprim_version = STARGETPRIM_WF.out.version
-    ch_raw_bam = STARGETPRIM_WF.out.primary_bam.collect()
+    // ch_raw_bam = STARGETPRIM_WF.out.primary_bam.collect()
 
     // STARGETPRIM_WF.out.junction
-    //     .collectFile( name: "junction_files.txt", newLine: true, sort: { it[0] }, storeDir: "${params.tmp_dir}" )
-    //     { it[0].replaceFirst(/_.*/,"") + "\t" + "${params.publish_dir}_${params.timestamp}/secondary_analyses/alignment_htseq/" + it[1].getName() }
+    //     .collectFile( name: "junction_files.txt", newLine: true, sort: { it[0] }, storeDir: "${ch_tmp_dir}" )
+    //     { it[0].replaceFirst(/_.*/,"") + "\t" + "${ch_publish_dir}_${ch_timestamp}/secondary_analyses/alignment_htseq/" + it[1].getName() }
 
     STARGETPRIM_WF.out.primary_bam
-        .collectFile( name: "bam_files.txt", newLine: true, sort: { it[0] }, storeDir: "${params.tmp_dir}" )
-            { it[0] + "\t" + "${params.publish_dir}_${params.timestamp}/secondary_analyses/alignment_htseq/" + it[1].getName() }
+        .collectFile( name: "bam_files.txt", newLine: true, sort: { item -> item[0] }, storeDir: "${ch_tmp_dir}" )
+            { item -> item[0] + "\t" + "${ch_publish_dir}_${ch_timestamp}/secondary_analyses/alignment_htseq/" + item[1].getName() }
 
     GENE_BODY_COVERAGE_RNA (STARGETPRIM_WF.out.primary_bam, ch_genebody_ref, ch_disable_publish )
     ch_gene_body_df = GENE_BODY_COVERAGE_RNA.out.df.collect()
@@ -213,7 +234,7 @@ workflow RNASEQ_WF {
     CREATE_HTSEQ_MATRIX ( ch_merge_tsv, ch_publish_dir, ch_enable_publish)
     PLOTTER_PCAHEATMAP_HTSEQ_SUMMARY_WF (ch_merge_tsv, ch_publish_dir, ch_disable_publish)
     ch_pcaheatmap_plot=  PLOTTER_PCAHEATMAP_HTSEQ_SUMMARY_WF.out.pcaheatmap_plot
-    ch_reference_celltype =  Channel.fromPath(params.celltype_ref)
+    ch_reference_celltype =  Channel.fromPath(ch_celltype_ref)
     CELL_TYPING (ch_merge_tsv, ch_reference_celltype.collect(), ch_publish_dir, ch_enable_publish)
      
     //STARFUSION_WF (ch_junction_file, params.ctat_resource_lib, ch_publish_dir, ch_disable_publish)
@@ -234,7 +255,7 @@ workflow RNASEQ_WF {
     
     CALC_DYNAMICRANGE (CREATE_HTSEQ_MATRIX.out.htseq_matrix ,ch_publish_dir, ch_enable_publish)
 
-    if ( params.skip_subsampling || branched_reads.large.ifEmpty { true } ) {
+    if ( ch_skip_subsampling || branched_reads.large.ifEmpty { true } ) {
     	collect_master_stats = ch_merge_tsv.collect().ifEmpty([])
 	    .combine( ch_fastp_report.collect().ifEmpty([]))
 	    .combine( ch_qunt_merge_tsv.collect().ifEmpty([]) )
@@ -257,7 +278,7 @@ workflow RNASEQ_WF {
 
     }
 
-    CREATE_MASTER_STATS (collect_master_stats, COUNT_READS_FASTQ_WF.out.combined_read_counts, branched_reads.large.ifEmpty{}, ch_publish_dir, ch_disable_publish)
+    CREATE_MASTER_STATS (collect_master_stats, COUNT_READS_FASTQ_WF.out.combined_read_counts, branched_reads_after_filter.large.ifEmpty{}, ch_publish_dir, ch_disable_publish)
 
     ch_tool_versions = ch_fastp_version.take(1)
                                     .combine(ch_seqtk_version.take(1).ifEmpty([]))
@@ -288,22 +309,22 @@ workflow RNASEQ_WF {
 
     params_meta = [
             session_id: workflow.sessionId,
-            instrument: params.instrument,
-            genome: params.genome,
-            read_length: params.read_length,
-            adapter_sequence: params.adapter_sequence,
-            adapter_sequence_r2: params.adapter_sequence_r2,
-            skip_subsampling: params.skip_subsampling,
-            skip_10X: params.skip_10X
+            instrument: ch_instrument,
+            genome: ch_genome,
+            read_length: ch_read_length,
+            adapter_sequence: ch_adapter_sequence,
+            adapter_sequence_r2: ch_adapter_sequence_r2,
+            skip_subsampling: ch_skip_subsampling,
+            skip_10X: ch_skip_10X
     ]
 
-    if (!params.skip_subsampling) {
-        params_meta['subsample_reads'] = params.n_reads
+    if (!ch_skip_subsampling) {
+        params_meta['subsample_reads'] = ch_n_reads
     }
 
-    if (!params.skip_10X) {
-        params_meta['lib_protocol_10x'] = params.lib_protocol_10x
-        params_meta['lib_type_10x'] = params.lib_type_10x
+    if (!ch_skip_10X) {
+        params_meta['lib_protocol_10x'] = ch_lib_protocol_10x
+        params_meta['lib_type_10x'] = ch_lib_type_10x
     }
 
     MULTIQC_WF ( collect_mqc,
@@ -330,51 +351,6 @@ workflow RNASEQ_WF {
     
    
   
-}
-
-workflow {
-    
-      
-    if ( params.reads ) {
-
-        ch_reads = Channel.fromFilePairs( params.reads , size: -1 , checkExists: true )
-                            .map { tag, pair -> subtags = ( tag =~ /(.*)_(S\d+)_(L+\d+)/)[0]; [ subtags[1], subtags[2], subtags[3], pair ] }
-                            .groupTuple()
-                            .map { tag, sample, lane, pair -> [ tag, sample.flatten(), lane.flatten(), pair.flatten() ] }
-
-    } else if ( params.input_csv  ) {
-        
-        ch_reads = Channel.fromPath( params.input_csv  ).splitCsv( header:true )
-                            .map { row -> [ row.sampleId, [ row.read1, row.read2 ] ] }
-                            .map { tag, pair -> subtags = ( tag =~ /(.*)_(S\d+)_(L+\d+)/)[0]; [ subtags[1], subtags[2], subtags[3], pair ] }
-                            .groupTuple()
-                            .map { tag, sample, lane, pair -> [ tag, sample.flatten(), lane.flatten(), pair.flatten() ] }
-    
-    }
-
-    ch_multiqc_config = Channel.fromPath(params.multiqc_config, checkIfExists: true)
-    ch_reference_celltype =  Channel.fromPath(params.celltype_ref)
-    
-     RNASEQ_WF( 
-                params.publish_dir,
-                params.enable_publish,
-                params.disable_publish,
-                ch_reads, 
-                params.input_csv,
-                params.adapter_sequence,
-                params.adapter_sequence_r2,
-                params.salmon_index,
-                params.star_index, 
-                params.gtf_file, 
-                params.tx2gene,
-                ch_reference_celltype,
-                ch_multiqc_config, 
-                params.project,
-                params.genebody_ref,
-                params.min_reads
-
-             )
-           
 }
 
 workflow.onComplete {
@@ -404,8 +380,8 @@ workflow.onComplete {
     //     output["output"]["junction"][sample_name]["junction"] = junction_path
     // }
     
-    def output_json = JsonOutput.toJson(output)
-    def output_json_pretty = JsonOutput.prettyPrint(output_json)
+    def output_json = groovy.json.JsonOutput.toJson(output)
+    def output_json_pretty = groovy.json.JsonOutput.prettyPrint(output_json)
     File outputfile = new File("$params.tmp_dir/output.json")
     outputfile.write(output_json_pretty)
     println(output_json_pretty)
@@ -421,8 +397,8 @@ workflow.onError {
     output["output"]["bam"]         = [:]
     // output["output"]["junction"]    = [:]
     
-    def output_json = JsonOutput.toJson(output)
-    def output_json_pretty = JsonOutput.prettyPrint(output_json)
+    def output_json = groovy.json.JsonOutput.toJson(output)
+    def output_json_pretty = groovy.json.JsonOutput.prettyPrint(output_json)
     File outputfile = new File("$params.tmp_dir/output.json")
     outputfile.write(output_json_pretty)
     println(output_json_pretty)
