@@ -18,6 +18,12 @@ process PLOTTER_PCAHEATMAP_HTSEQ_SUMMARY {
     script:
     """
     Rscript /usr/local/bin/pca_heatmap_qc_salmon_htseq_nometadata.R
+    
+    # Rename files to uppercase
+    mv pca_mqc.png PCA_mqc.png
+    mv heatmap_mqc.png Heatmap__mqc.png
+    mv mt_mqc.png MT_mqc.png
+    mv genesdetected_mqc.png GenesDetected_mqc.png
     """
 }
 

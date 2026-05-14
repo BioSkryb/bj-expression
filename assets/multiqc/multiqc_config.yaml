@@ -1,4 +1,4 @@
-subtitle: "BJ-Expression v1.8.8"
+subtitle: "BJ-Expression v2.0.0"
 custom_logo_title: 'BioSkryb'
 custom_logo: bioskryb_logo-tagline.png
 intro_text: "The report aggregates all metrics from BJ-Expression pipeline to help evaluate the performance of single-cell libraries."
@@ -141,8 +141,8 @@ sp:
 
 # See https://github.com/ewels/MultiQC_TestData/blob/master/data/custom_content/with_config/table_headerconfig/multiqc_config.yaml
 custom_data:
-    overall_stats:
-        section_name: 'Overall stats'
+    SelectedMetrics:
+        section_name: 'Selected Metrics'
         file_format: "csv"
         plot_type: "table"
         only_defined_headers: False
@@ -219,7 +219,7 @@ custom_data:
                 description: "Proportion of reads mapping to intergenic regions"
                 placement: 1030
                 format: "{:,.5f}"
-            ProportionCountsMithochondrialGenes:
+            ProportionCountsMitochondrialGenes:
                 title: "Prop mitochondrion"
                 description: "Proportion of reads mapping to mitochondrion"
                 placement: 1040
@@ -232,6 +232,14 @@ custom_data:
                 title: "Protein-coding transcripts"
                 description: "Number of protein-coding transcripts detected"
                 placement: 1060
+            ProteinCodingInsertSizeMean:
+                title: "Protein-coding Mean insertsize"
+                description: "Mean insert size of protein-coding transcripts"
+                placement: 1062
+            ProteinCodingInsertSizeMedian:
+                title: "Protein-coding Median insertsize"
+                description: "Median insert size of protein-coding transcripts"
+                placement: 1065
             RatioAvTxbyGene:
                 title: "Mean number of txs per gene"
                 description: "Average number of transcripts oberserved per gene "
@@ -304,7 +312,7 @@ show_analysis_paths: false
 versions_table_group_header: "Pipeline"
 
 report_section_order:
-  overall_stats:
+  SelectedMetrics:
     order: 1000
   qualimap_stats:
     order: 500
