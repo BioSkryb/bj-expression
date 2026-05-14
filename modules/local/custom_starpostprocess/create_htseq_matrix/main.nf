@@ -13,7 +13,11 @@ process CREATE_HTSEQ_MATRIX {
 
     output:
     path("matrix*"), emit: htseq_matrix
-    
+    path("HouseKeepingGenes_CV_mqc.tsv"), emit: housekeeping_genes_CV
+    path("HouseKeepingGenes_Counts_mqc.tsv"), emit: housekeeping_genes_counts
+    path("HKGenes_Expression__mqc.png"), emit: housekeeping_genes_clustergram
+    path("HouseKeepingGenes_Expression.pdf"), emit: housekeeping_genes_clustergram_pdf
+
     script:
     """
     Rscript /usr/local/bin/htseq_summarydf_to_matrix.R
@@ -34,8 +38,9 @@ workflow CREATE_HTSEQ_MATRIX_WF{
                      )
     emit:
         htseq_matrix = CREATE_HTSEQ_MATRIX.out.htseq_matrix
-        
-    
+        housekeeping_genes = CREATE_HTSEQ_MATRIX.out.housekeeping_genes_CV
+        housekeeping_genes_clustergram = CREATE_HTSEQ_MATRIX.out.housekeeping_genes_clustergram
+
 }
 
 workflow{
