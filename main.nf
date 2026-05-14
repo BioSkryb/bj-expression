@@ -58,8 +58,8 @@ workflow {
                 params.instrument,
                 params.genome,
                 params.tmp_dir,
-                params.timestamp
-
-
-             )
+                params.timestamp,
+                params.skip_qc_plots,
+                params.bed_files_dir
+            )
 }

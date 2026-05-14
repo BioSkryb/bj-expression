@@ -7,21 +7,22 @@ process CREATE_MASTER_STATS {
     input:
     path(df_files)
     path(reads_csv)
+    path(insert_size_summary)
     val(large_files)
     val(publish_dir)
     val(disable_publish)
 
     output:
-    path("overall_stats_mqc.csv"), emit: stats
+    path("SelectedMetrics_mqc.csv"), emit: stats
     
     script:
     if (large_files) {
         """
-        Rscript /usr/local/bin/create_master_stats_scrnaseqwf.R ${reads_csv}
+        Rscript /usr/local/bin/create_master_stats_scrnaseqwf.R ${reads_csv} ${insert_size_summary}
         """
     } else {
         """
-        touch overall_stats_mqc.csv
+        touch SelectedMetrics_mqc.csv
         echo "Skipping process as large_files is set to false."
         """
     }

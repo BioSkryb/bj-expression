@@ -100,6 +100,8 @@ biosampleName,read1,read2
 Expression-test1,s3://bioskryb-data-share/BioSkryb-Testing-Data/genomics/homo_sapiens/GRCh38/illumina/fastq/small/rnaseq/Expression-test1_S1_L001_R1_001.fastq.gz,s3://bioskryb-data-share/BioSkryb-Testing-Data/genomics/homo_sapiens/GRCh38/illumina/fastq/small/rnaseq/Expression-test1_S1_L001_R2_001.fastq.gz
 ```
 
+**Optional Groups Column**: The CSV file can include an optional `groups` column containing sample group information. This column is mandatory when using the QC_Plot module.
+
 **Optional Modules**
 
 
@@ -108,6 +110,7 @@ This pipeline includes several optional modules. You can choose to include or ex
 - `--skip_subsampling`: Set this to `true` to exclude the subsampling module. By default, it is set to `true`.
 - `--skip_fastq_merge`: Set this to `true` to exclude the fastq merge module. By default, it is set to `false`.
 - `--skip_cutadapt`: Set this to `true` to exclude the CUTADAPT module. By default, it is set to `false`.
+- `--skip_qc_plots`: Set this to `true` to exclude the QC_plots module. By default, it is set to `false`.
 
 **Outputs**
 

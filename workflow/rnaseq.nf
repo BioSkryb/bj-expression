@@ -39,7 +39,8 @@ include { CUSTOM_AWK_DEMUX_CBC_FASTQ } from  '../modules/local/custom_10x_demux/
 include { CALC_DYNAMICRANGE } from '../modules/local/custom_dynamicrange_report/main.nf'
 include { COUNT_READS_FASTQ_WF } from '../nf-bioskryb-utils/modules/bioskryb/custom_read_counts/main.nf'
 include { CUTADAPT } from '../nf-bioskryb-utils/modules/cutadapt/main.nf'
-
+include { RNA_QC_PLOTS } from '../nf-bioskryb-utils/subworkflows/qc_plots/main.nf'
+include { INSERT_SIZE_ANALYSIS_WF } from '../modules/local/insert_size_analysis/main.nf'
 
 //include { STARFUSION_WF } from  '../nf-bioskryb-utils/modules/starFusion/main.nf'
 //include { MERGE_STAR_FUSION } from '../modules/local/custom_starpostprocess/merge_starfusion/main.nf'
@@ -78,6 +79,8 @@ workflow RNASEQ_WF {
         ch_genome
         ch_tmp_dir
         ch_timestamp
+        ch_skip_qc_plots
+        ch_bed_files_directory
 
     main:
     
@@ -218,7 +221,19 @@ workflow RNASEQ_WF {
     ch_gene_body_df = GENE_BODY_COVERAGE_RNA.out.df.collect()
     GENE_BODY_COVERAGE_RNA_PLOT (ch_gene_body_df, ch_disable_publish)
     ch_gene_body_report = GENE_BODY_COVERAGE_RNA_PLOT.out.gene_body_png
-               
+
+    // Run INSERT_SIZE_ANALYSIS_WF only for GRCh38 genome
+    ch_insert_size_summary = Channel.empty()
+    if (ch_genome == "GRCh38") {
+        INSERT_SIZE_ANALYSIS_WF(STARGETPRIM_WF.out.primary_bam,
+                ch_bed_files_directory,
+                ch_publish_dir,
+                ch_enable_publish
+        )
+        ch_insert_size_summary = INSERT_SIZE_ANALYSIS_WF.out.aggregated_summary
+    }
+    
+
     QUALIMAP_BAMRNA ( STARGETPRIM_WF.out.bam_raw , ch_gtf, ch_publish_dir, ch_disable_publish)
     ch_qualimap_report = QUALIMAP_BAMRNA.out.outdir
     ch_qualimap_version = QUALIMAP_BAMRNA.out.version
@@ -278,7 +293,7 @@ workflow RNASEQ_WF {
 
     }
 
-    CREATE_MASTER_STATS (collect_master_stats, COUNT_READS_FASTQ_WF.out.combined_read_counts, branched_reads_after_filter.large.ifEmpty{}, ch_publish_dir, ch_disable_publish)
+    CREATE_MASTER_STATS (collect_master_stats, COUNT_READS_FASTQ_WF.out.combined_read_counts, ch_insert_size_summary.ifEmpty([]), branched_reads_after_filter.large.ifEmpty{}, ch_publish_dir, ch_disable_publish)
 
     ch_tool_versions = ch_fastp_version.take(1)
                                     .combine(ch_seqtk_version.take(1).ifEmpty([]))
@@ -294,6 +309,18 @@ workflow RNASEQ_WF {
                             ch_publish_dir,
                             ch_enable_publish)
 
+    qc_plots_composition_jpg = Channel.empty()
+    if ( !ch_skip_qc_plots ) {
+        RNA_QC_PLOTS ( 
+            CREATE_HTSEQ_MATRIX.out.htseq_matrix,
+            CREATE_MASTER_STATS.out.stats,
+            ch_input_csv,
+            ch_publish_dir,
+            ch_enable_publish
+        )
+        qc_plots_composition_jpg = RNA_QC_PLOTS.out.composition_jpg
+    }
+
     collect_mqc = CREATE_MASTER_STATS.out.stats.collect().ifEmpty([])
                     .combine( ch_fastp_report.collect().ifEmpty([]))
                     .combine( ch_star_report.collect().ifEmpty([]))
@@ -306,6 +333,10 @@ workflow RNASEQ_WF {
                     .combine( ch_pcaheatmap_plot.collect().ifEmpty([]))
                     .combine( ch_gene_body_report.collect().ifEmpty([]))
                     .combine( REPORT_VERSIONS_WF.out.versions.collect().ifEmpty([]))
+                    .combine( qc_plots_composition_jpg.collect().ifEmpty([]))
+                    .combine( CREATE_HTSEQ_MATRIX.out.housekeeping_genes_CV.collect().ifEmpty([]))
+                    .combine( CREATE_HTSEQ_MATRIX.out.housekeeping_genes_counts.collect().ifEmpty([]))
+                    .combine( CREATE_HTSEQ_MATRIX.out.housekeeping_genes_clustergram.collect().ifEmpty([]))
 
     params_meta = [
             session_id: workflow.sessionId,
